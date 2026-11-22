@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raqeeb | رقيب</title>
+<style>
+  :root {
+    --bg:#060b14; --panel:#0c1524; --panel2:#101c30; --line:#1b2b45; --line2:#26395a;
+    --text:#dbe6f5; --muted:#7f94b3; --cyan:#22d3ee; --green:#22c55e; --amber:#f59e0b; --red:#ef4444;
+    --sans:"Segoe UI",Tahoma,"Noto Sans Arabic",system-ui,sans-serif;
+    --mono:"Cascadia Mono",Consolas,"Courier New",monospace;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; }
+  body { background:var(--bg); color:var(--text); font:15px/1.55 var(--sans);
+         background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+         background-size:48px 48px; background-position:-1px -1px; min-height:100vh; }
+  body::before { content:""; position:fixed; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(34,211,238,.10),transparent 60%),var(--bg); opacity:.93; z-index:-1; }
+  .mono { font-family:var(--mono); }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 20px 40px; }
+
+  header { display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--line2); flex-wrap:wrap; }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .brand svg { width:40px; height:40px; flex:none; }
+  .brand h1 { margin:0; font-size:22px; letter-spacing:.5px; line-height:1.1; }
+  .brand h1 span { color:var(--cyan); font-weight:400; }
+  .brand small { color:var(--muted); font-size:12px; letter-spacing:1.5px; text-transform:uppercase; }
+  html[dir=rtl] .brand small { letter-spacing:0; }
+  .spacer { flex:1; }
+  .status { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); font-family:var(--mono); }
+  .dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(34,197,94,.6); animation:pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow:0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow:0 0 0 0 rgba(34,197,94,0); } }
+  .lang { background:transparent; color:var(--text); border:1px solid var(--line2); border-radius:6px; padding:6px 12px; cursor:pointer; font:inherit; font-size:13px; }
+  .lang.reset { color:var(--muted); }
+  .lang.reset:hover { border-color:var(--red); color:var(--red); }
+  .lang:hover { border-color:var(--cyan); color:var(--cyan); }
+
+  .tiles { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin:20px 0; }
+  .tile { background:var(--panel); border:1px solid var(--line); border-inline-start:3px solid var(--c,var(--cyan)); border-radius:6px; padding:12px 14px; }
+  .tile .k { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.2px; }
+  html[dir=rtl] .tile .k { letter-spacing:0; font-size:12px; }
+  .tile .v { font:600 28px/1.2 var(--mono); margin-top:2px; }
+
+  .grid { display:grid; grid-template-columns:1.6fr 1fr; gap:16px; align-items:start; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; }
+  .panel > .hd { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 16px; border-bottom:1px solid var(--line); font-size:12px; color:var(--muted); letter-spacing:1.4px; text-transform:uppercase; }
+  html[dir=rtl] .panel > .hd { letter-spacing:0; font-size:13px; }
+  .panel > .bd { padding:16px; }
+
+  .row { display:flex; gap:8px; }
+  input[type=text] { flex:1; min-width:0; background:#070e1b; color:var(--text); border:1px solid var(--line2); border-radius:6px; padding:13px 14px; font:14px var(--mono); direction:ltr; text-align:start; }
+  input[type=text]:focus { outline:none; border-color:var(--cyan); box-shadow:0 0 0 3px rgba(34,211,238,.15); }
+  button.go { background:var(--cyan); color:#04202a; border:0; border-radius:6px; padding:0 22px; font:700 14px var(--sans); cursor:pointer; letter-spacing:.5px; }
+  button.go:hover { filter:brightness(1.1); }
+  button.go:disabled { opacity:.6; cursor:wait; }
+  .opt { display:flex; align-items:center; gap:8px; margin-top:12px; color:var(--muted); font-size:13px; }
+  .samples { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:12px; }
+  .samples span { color:var(--muted); font-size:12px; }
+  .chip { background:transparent; color:var(--cyan); border:1px solid var(--line2); border-radius:999px; padding:4px 12px; font:12px var(--mono); cursor:pointer; }
+  .chip:hover { border-color:var(--cyan); background:rgba(34,211,238,.08); }
+
+  .case { margin-top:16px; display:none; }
+  .case .top { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font:12px var(--mono); color:var(--muted); padding:0 0 12px; border-bottom:1px dashed var(--line2); }
+  .verdict { display:flex; align-items:center; gap:16px; margin:16px 0 8px; flex-wrap:wrap; }
+  .stamp { border:2px solid var(--vc); color:var(--vc); padding:6px 14px; border-radius:4px; font:700 15px var(--mono); letter-spacing:2px; text-transform:uppercase; transform:rotate(-2deg); }
+  html[dir=rtl] .stamp { letter-spacing:0; transform:rotate(2deg); }
+  .score { margin-inline-start:auto; text-align:end; }
+  .score b { font:700 34px/1 var(--mono); color:var(--vc); }
+  .score small { color:var(--muted); font:12px var(--mono); }
+  .gauge { display:grid; grid-template-columns:repeat(20,1fr); gap:3px; margin:10px 0 6px; direction:ltr; }
+  .gauge i { height:12px; background:var(--line); border-radius:2px; }
+  .gauge i.on { background:var(--vc); }
+  .meta { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0; }
+  .meta div { background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:8px 10px; min-width:0; }
+  .meta small { display:block; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:1px; }
+  html[dir=rtl] .meta small { letter-spacing:0; font-size:12px; }
+  .meta b { font:600 13px var(--mono); word-break:break-all; }
+  h3 { margin:16px 0 8px; font-size:12px; color:var(--muted); letter-spacing:1.4px; text-transform:uppercase; font-weight:600; }
+  html[dir=rtl] h3 { letter-spacing:0; font-size:13px; }
+  ol.ind { list-style:none; margin:0; padding:0; counter-reset:n; }
+  ol.ind li { counter-increment:n; display:flex; gap:12px; padding:10px 12px; background:var(--panel2); border:1px solid var(--line); border-inline-start:3px solid var(--vc); border-radius:6px; margin-bottom:8px; }
+  ol.ind li::before { content:"0" counter(n); font:700 13px var(--mono); color:var(--vc); padding-top:1px; }
+  .note { color:var(--muted); font-size:13px; margin:8px 0 0; }
+  .actions { margin-top:14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .ghost { background:transparent; color:var(--red); border:1px solid var(--red); border-radius:6px; padding:8px 14px; cursor:pointer; font:600 13px var(--sans); }
+  .ghost:hover { background:rgba(239,68,68,.12); }
+  .ok { color:var(--green); font-size:13px; }
+  .empty { text-align:center; color:var(--muted); padding:34px 10px; }
+  .empty svg { width:54px; height:54px; opacity:.5; }
+
+  .feed { max-height:520px; overflow:auto; }
+  .ev { display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; padding:10px 16px; border-bottom:1px solid var(--line); font:12px var(--mono); }
+  .ev:last-child { border-bottom:0; }
+  .ev .u { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; direction:ltr; text-align:start; color:var(--text); }
+  .ev .t { color:var(--muted); }
+  .ev .s { font-weight:700; }
+  .ev i { width:8px; height:8px; border-radius:50%; background:var(--c); }
+  .feedempty { color:var(--muted); padding:28px 16px; text-align:center; font-size:13px; }
+  footer { margin-top:24px; color:var(--muted); font-size:12px; text-align:center; }
+
+  @media (max-width:860px) { .grid { grid-template-columns:1fr; } .tiles { grid-template-columns:repeat(2,1fr); } .meta { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 6 10v13c0 11 7.5 19 18 22 10.500-3 18-11 18-22V10z" fill="#0c1524" stroke="#22d3ee" stroke-width="2.500"/><path d="M11 24c3-5 7-7.500 13-7.500S34 19 37 24c-3 5-7 7.500-13 7.500S14 29 11 24z" fill="none" stroke="#22d3ee" stroke-width="2"/><circle cx="24" cy="24" r="4.500" fill="#22d3ee"/></svg>
+      <div><h1>Raqeeb <span>| رقيب</span></h1><small data-i="tagline"></small></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="status"><span class="dot"></span><span data-i="online"></span> · <span id="clock"></span></div>
+    <button class="lang reset" id="reset" data-i="reset"></button>
+    <button class="lang" id="lang">العربية</button>
+  </header>
+
+  <section class="tiles">
+    <div class="tile" style="--c:var(--cyan)"><div class="k" data-i="scanned"></div><div class="v" id="t-scanned">0</div></div>
+    <div class="tile" style="--c:var(--red)"><div class="k" data-i="dangerous"></div><div class="v" id="t-dangerous">0</div></div>
+    <div class="tile" style="--c:var(--amber)"><div class="k" data-i="suspicious"></div><div class="v" id="t-suspicious">0</div></div>
+    <div class="tile" style="--c:var(--green)"><div class="k" data-i="safe"></div><div class="v" id="t-safe">0</div></div>
+    <div class="tile" style="--c:#a78bfa"><div class="k" data-i="reports"></div><div class="v" id="t-reports">0</div></div>
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="hd"><span data-i="scanTitle"></span><span class="mono">PRE-CLICK / URL ONLY</span></div>
+      <div class="bd">
+        <div class="row">
+          <input id="url" type="text" placeholder="https://example.com/login" autocomplete="off" spellcheck="false">
+          <button class="go" id="go"></button>
+        </div>
+        <label class="opt"><input type="checkbox" id="deep"> <span data-i="deep"></span></label>
+        <div class="samples">
+          <span data-i="try"></span>
+          <button class="chip" data-u="https://www.google.com/search?q=cats">google.com</button>
+          <button class="chip" data-u="http://paypal-verify-account.xyz/login.php">fake-paypal</button>
+          <button class="chip" data-u="http://185.23.44.9:8080/secure/emiratesnbd.php">ip-address</button>
+          <button class="chip" data-u="https://bit.ly/3xYz9Qa">short-link</button>
+        </div>
+
+        <div class="empty" id="empty">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#7f94b3" stroke-width="2" aria-hidden="true"><circle cx="21" cy="21" r="12"/><path d="m30 30 12 12"/></svg>
+          <div data-i="awaiting"></div>
+        </div>
+
+        <div class="case" id="case">
+          <div class="top"><span id="caseid"></span><span id="casetime"></span></div>
+          <div class="verdict">
+            <div class="stamp" id="stamp"></div>
+            <div class="score"><b id="score"></b><small>/100</small><br><small id="level"></small></div>
+          </div>
+          <div class="gauge" id="gauge"></div>
+          <div class="meta">
+            <div><small data-i="target"></small><b id="m-target"></b></div>
+            <div><small data-i="domain"></small><b id="m-domain"></b></div>
+            <div><small data-i="mlconf"></small><b id="m-ml"></b></div>
+          </div>
+          <h3 data-i="indicators"></h3>
+          <ol class="ind" id="reasons"></ol>
+          <p class="note" id="note"></p>
+          <div class="actions">
+            <button class="ghost" id="report"></button>
+            <span class="ok" id="reported"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="hd"><span data-i="feedTitle"></span><span class="mono">LIVE</span></div>
+      <div class="feed" id="feed"></div>
+    </section>
+  </div>
+  <footer data-i="footer"></footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const T = {
+  en: { tagline:"Fraud link detection operations", online:"SYSTEM ONLINE", scanned:"Links scanned", dangerous:"Dangerous", suspicious:"Suspicious", safe:"Safe", reports:"Public reports",
+    scanTitle:"Target analysis", scan:"ANALYZE", scanning:"ANALYZING…", deep:"Also check domain age (slower, needs internet on the server)", try:"Try:", awaiting:"Awaiting target. Paste a link to open a case.",
+    target:"Target", domain:"Domain", mlconf:"Model confidence", indicators:"Threat indicators", feedTitle:"Incident feed", feedEmpty:"No scans yet. Results appear here live.",
+    reset:"Reset data", resetConfirm:"Clear all scans and reports? This cannot be undone.",
+    report:"Report this link as a scam", reported:n=>`Report logged (${n} total).`, caseWord:"CASE",
+    Safe:"NO THREAT DETECTED", Suspicious:"SUSPECTED FRAUD", Dangerous:"LIKELY PHISHING", Invalid:"INVALID TARGET",
+    lvlSafe:"THREAT LEVEL: LOW", lvlSuspicious:"THREAT LEVEL: ELEVATED", lvlDangerous:"THREAT LEVEL: CRITICAL", lvlInvalid:"THREAT LEVEL: N/A",
+    noteSafe:"Safe means no warning signs were found in the link, not a guarantee.", noServer:"Could not reach the server. Is it running?",
+    footer:"Raqeeb analyses the link text only and never visits the site. A clean result is not a guarantee of safety." },
+  ar: { tagline:"عمليات رصد الروابط الاحتيالية", online:"النظام متصل", scanned:"الروابط المفحوصة", dangerous:"خطير", suspicious:"مشبوه", safe:"آمن", reports:"بلاغات المستخدمين",
+    scanTitle:"تحليل الهدف", scan:"تحليل", scanning:"…جارٍ التحليل", deep:"افحص عمر النطاق أيضاً (أبطأ، يحتاج إنترنت على الخادم)", try:"جرّب:", awaiting:"بانتظار الهدف. الصق رابطاً لفتح قضية.",
+    target:"الهدف", domain:"النطاق", mlconf:"ثقة النموذج", indicators:"مؤشرات التهديد", feedTitle:"سجل الحوادث", feedEmpty:"لا توجد فحوصات بعد. ستظهر النتائج هنا مباشرة.",
+    reset:"إعادة تعيين", resetConfirm:"مسح جميع الفحوصات والبلاغات؟ لا يمكن التراجع عن ذلك.",
+    report:"أبلغ عن هذا الرابط كاحتيال", reported:n=>`تم تسجيل البلاغ (${n} إجمالاً).`, caseWord:"قضية",
+    Safe:"لا تهديد مرصود", Suspicious:"اشتباه احتيال", Dangerous:"تصيّد محتمل", Invalid:"هدف غير صالح",
+    lvlSafe:"مستوى التهديد: منخفض", lvlSuspicious:"مستوى التهديد: مرتفع", lvlDangerous:"مستوى التهديد: حرج", lvlInvalid:"مستوى التهديد: غير متاح",
+    noteSafe:"آمن تعني عدم وجود علامات تحذير في الرابط، وليست ضماناً.", noServer:"تعذر الوصول إلى الخادم. هل هو يعمل؟",
+    footer:"رقيب يحلل نص الرابط فقط ولا يزور الموقع. النتيجة النظيفة ليست ضماناً للأمان." }
+};
+const REASON_AR = [
+  [/^Mentions the brand '(.+?)' but the real owner is (.+?), not (.+)$/, (m)=>`يذكر العلامة التجارية '${m[1]}' لكن المالك الحقيقي هو ${m[2]} وليس ${m[3]}`],
+  [/^Looks like a spoof of '(.+?)'/, (m)=>`يبدو انتحالاً لـ '${m[1]}' (أحرف مستبدلة بأرقام)`],
+  [/^Contains '@'/, ()=>"يحتوي على '@' والنص قبله مجرد تمويه، والموقع الحقيقي بعده"],
+  [/^Uses a raw IP address/, ()=>"يستخدم عنوان IP مباشراً بدلاً من اسم نطاق"],
+  [/^Uses lookalike \(punycode\)/, ()=>"يستخدم أحرفاً مشابهة (punycode) في النطاق"],
+  [/^Shortened link/, ()=>"رابط مختصر، الوجهة الحقيقية مخفية"],
+  [/^Uses a domain ending \((.+?)\)/, (m)=>`ينتهي بامتداد نطاق (${m[1]}) شائع في المواقع الاحتيالية`],
+  [/^Domain name contains pressure words/, ()=>"اسم النطاق يحتوي كلمات ضغط مثل login/verify/secure"],
+  [/^URL contains several sensitive words: (.+)$/, (m)=>`الرابط يحتوي عدة كلمات حساسة: ${m[1]}`],
+  [/^Unusually many subdomains \((\d+)\)/, (m)=>`عدد غير معتاد من النطاقات الفرعية (${m[1]})`],
+  [/^Many hyphens in the domain \((\d+)\)/, (m)=>`شرطات كثيرة في النطاق (${m[1]})`],
+  [/^Not using HTTPS/, ()=>"لا يستخدم HTTPS (اتصال غير مشفّر)"],
+  [/^Unusual port number \((.+?)\)/, (m)=>`رقم منفذ غير معتاد (${m[1]})`],
+  [/^Domain is full of random digits/, ()=>"النطاق مليء بأرقام عشوائية"],
+  [/^Very long URL \((\d+) characters\)/, (m)=>`رابط طويل جداً (${m[1]} حرفاً)`],
+  [/^Domain was registered only (\d+) days ago/, (m)=>`تم تسجيل النطاق قبل ${m[1]} يوماً فقط`],
+  [/^Domain age: (\d+) days/, (m)=>`عمر النطاق: ${m[1]} يوماً`],
+  [/^Official domain of a known organisation \((.+?)\)/, (m)=>`نطاق رسمي لجهة معروفة (${m[1]})`],
+  [/^No suspicious patterns/, ()=>"لا توجد أنماط مشبوهة في الرابط نفسه"],
+  [/^That does not look like a valid link/, ()=>"هذا لا يبدو رابطاً صالحاً"],
+];
+const COLORS = {green:"#22c55e", orange:"#f59e0b", red:"#ef4444", gray:"#7f94b3"};
+let lang = "en", last = null, current = "";
+try { lang = localStorage.getItem("raqeeb_lang") || "en"; } catch(e) {}
+
+const t = k => T[lang][k];
+function reason(r) {
+  if (lang === "en") return r;
+  for (const [re, fn] of REASON_AR) { const m = r.match(re); if (m) return fn(m); }
+  return r;
+}
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.querySelectorAll("[data-i]").forEach(e => e.textContent = t(e.dataset.i));
+  $("go").textContent = t("scan");
+  $("report").textContent = "⚑ " + t("report");
+  $("lang").textContent = lang === "ar" ? "English" : "العربية";
+  if (last) render(last);
+  loadStats();
+}
+function clock() { $("clock").textContent = new Date().toLocaleTimeString("en-GB"); }
+setInterval(clock, 1000); clock();
+
+function caseId() {
+  const d = new Date(), p = n => String(n).padStart(2, "0");
+  return `RQB-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${Math.floor(1000 + Math.random()*9000)}`;
+}
+function render(d) {
+  $("empty").style.display = "none";
+  $("case").style.display = "block";
+  const c = COLORS[d.color] || COLORS.gray;
+  $("case").style.setProperty("--vc", c);
+  $("caseid").textContent = `${t("caseWord")} ${d.caseId}`;
+  $("casetime").textContent = d.time;
+  $("stamp").textContent = t(d.label);
+  $("score").textContent = d.score;
+  $("level").textContent = t("lvl" + d.label);
+  const g = $("gauge"); g.innerHTML = "";
+  const on = Math.round(d.score / 5);
+  for (let i = 0; i < 20; i++) { const s = document.createElement("i"); if (i < on) s.className = "on"; g.appendChild(s); }
+  $("m-target").textContent = d.url.length > 38 ? d.url.slice(0, 36) + "…" : d.url;
+  $("m-domain").textContent = d.domain || "-";
+  $("m-ml").textContent = d.ml_probability != null ? Math.round(d.ml_probability * 100) + "%" : "-";
+  $("reasons").innerHTML = "";
+  d.reasons.forEach(r => { const li = document.createElement("li"); li.textContent = reason(r); $("reasons").appendChild(li); });
+  $("note").textContent = d.label === "Safe" ? t("noteSafe") : "";
+  $("reported").textContent = "";
+}
+async function check() {
+  const url = $("url").value.trim();
+  if (!url) return;
+  current = url;
+  $("go").disabled = true; $("go").textContent = t("scanning");
+  try {
+    const r = await fetch(`/api/check?url=${encodeURIComponent(url)}&deep=${$("deep").checked}`);
+    const d = await r.json();
+    d.caseId = caseId(); d.time = new Date().toLocaleString("en-GB");
+    last = d; render(d); loadStats();
+  } catch (e) { alert(t("noServer")); }
+  $("go").disabled = false; $("go").textContent = t("scan");
+}
+function ago(ts) { const s = Math.max(0, Math.round(Date.now()/1000 - ts)); return s < 60 ? s + "s" : s < 3600 ? Math.floor(s/60) + "m" : Math.floor(s/3600) + "h"; }
+async function loadStats() {
+  try {
+    const s = await (await fetch("/api/stats")).json();
+    ["scanned","dangerous","suspicious","safe","reports"].forEach(k => $("t-" + k).textContent = s[k]);
+    const f = $("feed"); f.innerHTML = "";
+    if (!s.recent.length) { f.innerHTML = `<div class="feedempty">${t("feedEmpty")}</div>`; return; }
+    s.recent.forEach(e => {
+      const row = document.createElement("div"); row.className = "ev"; row.style.setProperty("--c", COLORS[e.color] || COLORS.gray);
+      row.innerHTML = `<i></i><span class="u"></span><span><span class="s" style="color:${COLORS[e.color] || COLORS.gray}">${e.score}</span> <span class="t">${ago(e.ts)}</span></span>`;
+      row.querySelector(".u").textContent = e.url; row.querySelector(".u").title = e.url;
+      f.appendChild(row);
+    });
+  } catch (e) {}
+}
+$("go").onclick = check;
+$("url").addEventListener("keydown", e => { if (e.key === "Enter") check(); });
+document.querySelectorAll("[data-u]").forEach(b => b.onclick = () => { $("url").value = b.dataset.u; check(); });
+$("report").onclick = async () => {
+  const r = await fetch("/api/report", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({url: current})});
+  const d = await r.json();
+  $("reported").textContent = t("reported")(d.total_reports); loadStats();
+};
+$("reset").onclick = async () => {
+  if (!confirm(t("resetConfirm"))) return;
+  try { await fetch("/api/reset", {method:"POST"}); } catch(e) { alert(t("noServer")); return; }
+  last = null; $("case").style.display = "none"; $("empty").style.display = "block";
+  loadStats();
+};
+$("lang").onclick = () => { lang = lang === "ar" ? "en" : "ar"; try { localStorage.setItem("raqeeb_lang", lang); } catch(e) {} applyLang(); };
+applyLang(); setInterval(loadStats, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "accuracy": 1.0,
+  "confusion_matrix": [
+    [
+      2007,
+      0
+    ],
+    [
+      0,
+      2390
+    ]
+  ],
+  "importances": {
+    "digit_ratio": 0.22328573559201725,
+    "num_digits": 0.10679615968161786,
+    "susp_word_count": 0.10607708491343967,
+    "susp_tld": 0.1042598744384766,
+    "is_shortener": 0.08145411741075542,
+    "brand_impersonation": 0.06863069963968849,
+    "host_entropy": 0.04165418705173374,
+    "susp_word_in_host": 0.03644589015138692,
+    "host_length": 0.03523710142918976,
+    "is_https": 0.03165612518310874,
+    "num_dots": 0.028271612803851535,
+    "num_special_chars": 0.026325250705579076,
+    "query_length": 0.02509232580467965,
+    "url_length": 0.015366293931566116,
+    "num_hyphens": 0.012604424461135638,
+    "num_subdomains": 0.01227198536854659,
+    "has_ip": 0.011632161759366521,
+    "path_length": 0.009485367721989664,
+    "has_at": 0.009011047955425976,
+    "path_depth": 0.008445851896430042,
+    "brand_lookalike": 0.0041884427902414935,
+    "odd_port": 0.001808259309773213,
+    "has_punycode": 0.0,
+    "double_slash_in_path": 0.0
+  }
+}

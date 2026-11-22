@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+scikit-learn
+pandas
+joblib
+python-whois   # optional: only needed for the domain-age check
